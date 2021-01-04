@@ -31,10 +31,6 @@ Traceback (most recent call last):
 ValueError: invalid literal for int() with base 10: '1222ddd'
 >>>
 ```
-#### 总结：
-字符串 str 转换成整形 int 中，只能包含数字，不能有其他的。
-如果是浮点类型的字符串，可使用 float 。
-
 ### `float`
 > float() 函数用于将整数和字符串转换成浮点数。
 #### 参数
@@ -53,6 +49,20 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 ValueError: could not convert string to float: '10aaa'
 >>>
+```
+
+### 总结：
+1. 字符串 str 转换成 int, float ，只能包含数字，不能有其他的。
+2. 如果是浮点类型的字符串，可使用 float 。
+所以将 str 转换成数字，需要判断一下字符串中是否只包含数字
+```py
+# isdigit() 方法检测字符串是否只由数字组成。
+str1 = '123'
+str2 = '123a'
+if str1.isdigit():
+  int(str1)
+if str2.isdigit():
+  int(str2)
 ```
 
 ## 转换为字符串
