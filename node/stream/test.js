@@ -82,3 +82,50 @@
 // writeStream.on('error', (err) => {
 //   console.log(err);
 // })
+
+// 管道流
+// const { createReadStream, createWriteStream } = require('fs')
+// const { resolve }= require('path')
+
+// const readStream = createReadStream(resolve(__dirname, '孔乙己.txt'))
+// const writeStream = createWriteStream(resolve(__dirname, 'output.txt'))
+// readStream.pipe(writeStream)
+// console.log('完成');
+
+// 链式操作
+// const { createReadStream, createWriteStream } = require('fs')
+// const { resolve } = require('path')
+// const { Gzip, Gunzip } = require('zlib')
+
+// createReadStream(resolve(__dirname, './孔乙己.txt'))
+//   .pipe(Gzip())
+//   .pipe(createWriteStream(resolve(__dirname, '孔乙己.txt.gz')))
+
+// 创建可读流
+const { Readable, Writable } = require('stream')
+
+const readStream = new Readable({
+  /**
+   * Readable 类中默认有 _read 方法的实现，_read 方法有一个参数 size，用来向 read 方法指定应该读取多少数据返回，
+   * 不过只是一个参考数据，很多实现忽略此参数
+   */
+  read: (data) => {
+    console.log(data);
+  }
+})
+
+const writeStream = new Writable({
+  write: (chunk, encoding, next) => {
+    console.log(chunk.toString());
+    next()
+  }
+})
+
+readStream.pipe(writeStream)
+/**
+ * 通过 this.push 向缓冲区推送数据，缓冲区概念后面会提到，暂时理解为挤到了水管中可消费了
+ * push 的内容只能是字符串或者 Buffer，不能是数字
+ * push 方法有第二个参数 encoding，用于第一个参数是字符串时指定 encoding
+ */
+readStream.push('hello')
+readStream.push('node')
