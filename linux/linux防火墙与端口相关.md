@@ -37,10 +37,10 @@ iptables -t filter -nvL
 # 由于 filter 为默认，则可以省略
 iptables -nvL
 ```
-
-### 添加规则
+###  filter
+####  添加规则 
 > 当匹配到一个规则链后，则停止，不在往下查找。
-#### 参数
+#####  参数
 * -s, --source [!] address[/mask] ：把指定的一个／一组地址作为源地址，按此规则进行过滤。当后面没有 mask 时，address 是一个地址，比如：192.168.1.1；当 mask 指定时，可以表示一组范围内的地址，比如：192.168.1.0/255.255.255.0。
 * -p：匹配协议,如tcp,udp,icmp，只有使用 `-p tcp` 后，才可以指定端口；
 * -d：目的地地址，在 input 规则链中无意义。
@@ -54,18 +54,31 @@ iptables -A INPUT -s 192.168.1.0 --dport 22 -j ACCEPT
 iptables -I INPUT -p tcp --dport 22 -j ACCEPT
 ```
 
-### 修改默认规则
+####  修改默认规则
 ```bash
 # 修改默认规则
 iptables -P INPUT ACCEPT
 ```
-### 清除规则
-#### -F
+####  清除规则
+#####  -F
 > 只会清楚添加的规则，不会清楚默认规则
 
-#### -D
+#####  -D
 > 删除规则
 ```bash
 # 根据序号删除
 iptables -D INPUT 2
+```
+
+### nat
+#### 规则
+* DNAT: 用于目标地址转换（PREROUTING）
+* SNAT: 用于源地址转换（POSTROUTING）。
+#### PREROUTING: 用于转换目的地址，将请求的地址转发出去；
+```bash
+# 将 114.115.116.117:3344 的请求转发到 10.10.10.1
+iptable -t nat -A PREROUTING -i ent0 -d 114.115.116.117 -p tcp --dport 3344 -j DNAT --to-destination 10.10.10.1 
+
+# 将请求地址伪装成其他 ip
+iptables -t nat -A POSTROUTING -o ent1 -s 10.10.11.4/24 -j SNAT --to-source 111.222.333.444
 ```
