@@ -1,22 +1,22 @@
-# def counter():
-#   i = [0]
-#   def sum_once():
-#     i[0] += 1
-#     return i[0]
-#   return sum_once
+from functools import wraps
 
-# it = counter()
-# print(it())
-# print(it())
-# print(it())
+def log(type):
+  # 简单实现一个参数逻辑
+  if type == 'sum':
+    print('sum')
+  else:
+    print('del')
 
+  def decorator(func):
+    @wraps(func)
+    def wrapper(*argvs, **kwargv):
+      print('---')
+      return func(*argvs, **kwargv)
+    return wrapper
+  return decorator
 
-a = 123
-b = [1, 2, 3]
-def test():
-  print(a)
-  print(b)
-  a = a + 1
-  print(a)
-  print(b[1] + 1)
-test()
+@log(type = 'sum')
+def sum(a, b):
+  return a + b
+
+sum(1, 2)
