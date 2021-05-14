@@ -1,7 +1,5 @@
-str1 = 'abc'
-num1 = 123
-list1 = [1, 2, 3]
+list1 = []
+for item in range(5):
+  list1.append(item)
 
-print(isinstance(str1, object))
-print(isinstance(num1, object))
-print(isinstance(list1, object))
+print(list1)
